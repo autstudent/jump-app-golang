@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
     "fmt"
@@ -122,7 +122,7 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
     }
 }
 
-func main() {
+func Start() {
 
 	mux := http.NewServeMux()
 
@@ -134,6 +134,5 @@ func main() {
 
 	err := http.ListenAndServe(port, mux)
 	log.Fatal(err)
-
 
 }
