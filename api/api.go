@@ -15,8 +15,8 @@ type Jump struct {
 }
 
 type AppResponse struct {
-	Code int
-    Message string
+	Code int  `json:"code"`
+    Message string  `json:"message"`
 }
 
 
@@ -30,14 +30,24 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func jump(w http.ResponseWriter, r *http.Request) {
 
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Go-Lang-modifier", "true")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-modifier")
+
 	// Test POST method
 	if r.Method == "GET" {
 		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from GoLand!"}
 		getData, err := json.Marshal(getResponse) 
 		if err != nil { 
 		  panic("Error in Marshal") 
-		} 
+		}
 		fmt.Fprint(w, string(getData))
+		return
+	}
+
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 
@@ -98,7 +108,8 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(i) > 1 { 
-		// REQUIRED TO IMPLEMENT
+		mes = "More than one jump is not supported right"
+		cod = http.StatusOK
 	}
 	
 	// Generate the response
