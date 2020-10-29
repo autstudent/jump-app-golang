@@ -15,8 +15,8 @@ type Jump struct {
 }
 
 type AppResponse struct {
-	Code int
-    Message string
+	Code int  `json:"code"`
+    Message string  `json:"message"`
 }
 
 
@@ -108,7 +108,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(i) > 1 { 
-		mes = "More than one jump is not supported right now"
+		mes = "More than one jump is not supported right"
 		cod = http.StatusOK
 	}
 	
