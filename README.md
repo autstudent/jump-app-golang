@@ -2,8 +2,7 @@
 Goland Microservice Demo
 
 
-# Examples
-
+# Local Examples 
 
 ```
 $ curl -X GET localhost:8442/
@@ -29,20 +28,18 @@ $ curl -XPOST -H "Content-type: application/json" -d '{
     "last_path": "/jump",
     "jump_path": "/jump",
     "jumps": [
-        "http://java-springboot-demo-git:8443",
+        "http://localhost:8442",
+        "http://localhost:8442",
+        "http://localhost:8442",
+        "http://localhost:8442",
+        "http://localhost:8442",
+        "http://localhost:8443"
     ]
 }' 'localhost:8442/jump'
 ```
 
 
-curl -XPOST -H "Content-type: application/json" -d '{             
-    "message": "Hello",
-    "last_path": "/jump",
-    "jump_path": "/jump",
-    "jumps": [
-        "http://java-springboot-demo-git:8443"
-    ]
-}' 'localhost:8442/jump'
+
 
 
 
