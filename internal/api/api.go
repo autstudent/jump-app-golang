@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"log"
 	"encoding/json"
+	"bytes"
+	"strconv"
 )
 
 type Jump struct {
@@ -20,22 +22,29 @@ type AppResponse struct {
 }
 
 
+// Index function
 func home(w http.ResponseWriter, r *http.Request) {
+
+	// Test only / accepted
     if r.URL.Path != "/" {
         errorHandler(w, r, http.StatusNotFound)
         return
-    }
+	}
+	
+	// return message
     fmt.Fprintf(w, "/ - Greetings from GoLand!")
 }
 
+// Jump Function
 func jump(w http.ResponseWriter, r *http.Request) {
 
+	// Define custom header to avoid CORS
 	w.Header().Add("Content-Type", "application/json")
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Header().Add("Go-Lang-modifier", "true")
 	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-modifier")
 
-	// Test POST method
+	// GET Method return a direct Response
 	if r.Method == "GET" {
 		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from GoLand!"}
 		getData, err := json.Marshal(getResponse) 
@@ -46,6 +55,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// OTION Methods write header
 	if r.Method == "OPTIONS" {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -60,8 +70,10 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	dec := json.NewDecoder(r.Body)
     dec.DisallowUnknownFields()
 
+	// Define a jump variable
 	var j Jump
 
+	// Decode object in POST body
 	err := dec.Decode(&j)
 	if err != nil {
 		log.Println("Error decoding Jump Object")
@@ -74,16 +86,24 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	var cod int
 	var i = j.Jumps
 
-	// Make calls
+	// Return Error when receive a POST and jumps are not defined
 	if len(i) == 0 {
 		errorHandler(w, r, http.StatusBadRequest)
 		return
 	} 
 
+	// Add jump to headers
+	var jumpheader = "jump" + strconv.Itoa(len(i))
+	w.Header().Add(jumpheader, "Golang")
+
+	// When there is 1 jump 
 	if len(i) == 1 { 
 
+		// Define Last URL
 		var url = i[0] + j.Last_path
 
+		// Sent GET request to the last jump
+		log.Println("GET Calling", url)
 		req, err := http.Get(url)
 		if err != nil {
 			mes = "/jump - Farewell from GoLand! Error jumping " + url
@@ -91,9 +111,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		} else {
 			respdec := json.NewDecoder(req.Body)
 			respdec.DisallowUnknownFields()
-
 			var res AppResponse
-
 			errdec := respdec.Decode(&res)
 			if errdec != nil {
 				log.Println("Error decoding Response Object")
@@ -101,25 +119,55 @@ func jump(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			// Generate response
 			mes = res.Message
 			cod = res.Code
 		}
 
 	}
 
+	// When there are more than 1 jumps
 	if len(i) > 1 { 
-		mes = "More than one jump is not supported right"
-		cod = http.StatusOK
+
+		// Define URL and Body
+		var url = i[0] + j.Jump_path
+		var body = j
+		body.Jumps = i[1:]
+
+		// Sent POST request to the last jump
+		log.Println("POST Calling", url, "-> Body: ", body)
+		requestBody, err := json.Marshal(body)
+		req, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+		if err != nil {
+			mes = "/jump - Farewell from GoLand! Error jumping " + url
+			cod = http.StatusBadGateway
+		} else {
+			respdec := json.NewDecoder(req.Body)
+			respdec.DisallowUnknownFields()
+			var res AppResponse
+			errdec := respdec.Decode(&res)
+			if errdec != nil {
+				log.Println("Error decoding Response Object")
+				errorHandler(w, r, http.StatusBadRequest)
+				return
+			}
+
+			// Generate response
+			mes = res.Message
+			cod = res.Code
+		}
 	}
 	
-	// Generate the response
+	// Generate the final response
 	response := AppResponse{Code: cod, Message: mes}
 	data, err := json.Marshal(response) 
 	if err != nil { 
 	  panic("Error in Marshal") 
 	} 
 
-	log.Println("Sending... " + string(data))
+	log.Println("Sending Response... " + string(data))
+
+	// Sent the final Response
 	fmt.Fprint(w, string(data)) 
 }
 
