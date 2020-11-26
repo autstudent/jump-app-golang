@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/acidonper/golang-demo/internal/api"
+	"github.com/acidonper/golang-demo/cmd/golang-demo/internal/api"
 )
 
 func main() {

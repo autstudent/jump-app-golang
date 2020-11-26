@@ -1,5 +1,3 @@
-module github.com/acidonper/golang-demo
+module github.com/acidonper/golang-demo/cmd/golang-demo
 
 go 1.14
-
-replace github.com/acidonper/golang-demo => ./cmd/golang-demo
