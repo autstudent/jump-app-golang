@@ -1,4 +1,4 @@
-package api
+package jump
 
 import (
   "net/http"

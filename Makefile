@@ -1,5 +1,5 @@
 BINARY_PATH=bin
-CMD_MAIN_PATH=cmd/golang-demo/main.go
+CMD_MAIN_PATH=cmd/main.go
 CMD_BINARY_PATH=$(BINARY_PATH)/golang-demo
 GOCMD=go
 GOTEST=$(GOCMD) test
