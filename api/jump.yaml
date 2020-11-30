@@ -1,0 +1,86 @@
+---
+openapi: 3.0.2
+info:
+  title: jump
+  version: 1.0.0
+paths:
+  /jump:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppResponse'
+          description: Api jump path response
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Jump'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppResponse'
+          description: Api jump path response
+    options:
+      responses:
+        "200":
+          description: Api jump path response
+  /:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                golang example:
+                  value: / - Greetings from GoLand!
+                springboot example:
+                  value: / - Greetings from Springboot!
+          description: Api plain welcome
+components:
+  schemas:
+    AppResponse:
+      title: Root Type for AppResponse
+      description: Jump App Standard Response
+      type: object
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      example:
+        code: 200
+        message: /last - Greetings from GoLand!
+    Jump:
+      title: Root Type for Jump
+      description: Jump Object
+      type: object
+      properties:
+        message:
+          description: Message used in last jump
+          type: string
+        last_path:
+          description: last jump path
+          type: string
+        jump_path:
+          description: intermediate jumps path
+          type: string
+        jumps:
+          description: |
+            Array of jump in order to perform custom jumps
+          type: array
+          items:
+            type: string
+      example:
+        message: hi
+        last_path: /last
+        jump_path: /jump
+        jumps:
+        - http://springboot:8443
