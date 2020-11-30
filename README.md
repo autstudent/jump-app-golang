@@ -21,8 +21,11 @@ $ dnf install golang
 - Execute de App from de root folder
 
 ```$bash
+$ make build
+go build -o bin/golang-demo -race cmd/main.go
 $ make run
-2020/11/21 20:13:59 Starting server on :8442
+bin/golang-demo
+2020/11/30 22:07:25 Starting server on :8442
 ```
 
 ## Golang Test
@@ -30,9 +33,10 @@ $ make run
 Regarding test, it is required execute next command:
 
 ```$bash
-$ make test-cover
-?       github.com/acidonper/golang-demo/cmd/golang-demo        [no test files]
-ok      github.com/acidonper/golang-demo/internal/api   (cached)        coverage: 94.3% of statements
+$ make test
+go test ./...
+?       github.com/acidonper/golang-demo/cmd    [no test files]
+ok      github.com/acidonper/golang-demo/pkg/jump       3.095s
 ```
 
 ## Test Demo App API Locally
