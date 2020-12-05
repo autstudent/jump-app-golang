@@ -18,7 +18,7 @@ $ brew install golang
 $ dnf install golang
 ```
 
-- Execute de App from de root folder
+- Execute the App from the root folder
 
 ```$bash
 $ make build
