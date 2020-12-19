@@ -33,7 +33,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	// return message
-    fmt.Fprintf(w, "/ - Greetings from GoLand!")
+    fmt.Fprintf(w, "/ - Greetings from Golang!")
 }
 
 // Jump Function
@@ -48,7 +48,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	// GET Method return a direct Response
 	if r.Method == "GET" {
 		log.Println("Received GET /jump")
-		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from GoLand!"}
+		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from Golang!"}
 		getData, err := json.Marshal(getResponse) 
 		if err != nil { 
 		  panic("Error in Marshal") 
@@ -111,7 +111,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		log.Println("GET Calling", url)
 		req, err := http.Get(url)
 		if err != nil {
-			mes = "/jump - Farewell from GoLand! Error jumping " + url
+			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
 			respdec := json.NewDecoder(req.Body)
@@ -146,7 +146,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		requestBody, err := json.Marshal(body)
 		req, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
 		if err != nil {
-			mes = "/jump - Farewell from GoLand! Error jumping " + url
+			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
 			respdec := json.NewDecoder(req.Body)

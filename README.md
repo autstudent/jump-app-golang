@@ -45,14 +45,14 @@ ok      github.com/acidonper/golang-demo/pkg/jump       3.095s
 
 ```$bash
 $ curl -X GET localhost:8442/
-/ - Greetings from GoLand!
+/ - Greetings from Golang!
 ```
 
 - GET method to reach /jump
 
 ```$bash
 $ curl -X GET localhost:8442/jump
-{"code":200,"message":"/jump - Greetings from GoLand!"}
+{"code":200,"message":"/jump - Greetings from Golang!"}
 ```
 
 - POST method with JUMP Object in the body to make multi jumps through Golang Demo
@@ -71,7 +71,7 @@ $ curl -XPOST -H "Content-type: application/json" -d '{
         "http://localhost:8442"
     ]
 }' 'localhost:8442/jump'
-{"code":200,"message":"/jump - Greetings from GoLand!"}
+{"code":200,"message":"/jump - Greetings from Golang!"}
 ```
 
 - POST to index page
@@ -86,3 +86,9 @@ $ curl -XPOST -H "Content-type: application/json" -d '{
     ]
 }' 'localhost:8442/jump'
 ```
+
+## Author Information
+
+Asier Cidon
+
+asier.cidon@gmail.com

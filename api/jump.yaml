@@ -7,7 +7,7 @@ paths:
   /jump:
     get:
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -21,7 +21,7 @@ paths:
               $ref: '#/components/schemas/Jump'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -29,17 +29,17 @@ paths:
           description: Api jump path response
     options:
       responses:
-        "200":
+        '200':
           description: Api jump path response
   /:
     get:
       responses:
-        "200":
+        '200':
           content:
             application/json:
               examples:
                 golang example:
-                  value: / - Greetings from GoLand!
+                  value: / - Greetings from Golang!
                 springboot example:
                   value: / - Greetings from Springboot!
           description: Api plain welcome
@@ -57,7 +57,7 @@ components:
           type: string
       example:
         code: 200
-        message: /last - Greetings from GoLand!
+        message: /last - Greetings from Golang!
     Jump:
       title: Root Type for Jump
       description: Jump Object
@@ -83,4 +83,4 @@ components:
         last_path: /last
         jump_path: /jump
         jumps:
-        - http://springboot:8443
+          - http://springboot:8443
