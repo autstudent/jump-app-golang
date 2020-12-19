@@ -1,19 +1,19 @@
 package jump
 
 import (
-    "fmt"
-	"net/http"
-	"log"
-	"encoding/json"
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
 	"strconv"
 )
 
 type Jump struct {
-	Message string
-    Last_path string
-    Jump_path string
-    Jumps []string
+	Message string `json:"message"`
+    Last_path string `json:"last_path"`
+    Jump_path string `json:"jump_path"`
+    Jumps []string `json:"jumps"`
 }
 
 type AppResponse struct {
@@ -24,6 +24,7 @@ type AppResponse struct {
 
 // Index function
 func home(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received GET /")
 
 	// Test only / accepted
     if r.URL.Path != "/" {
@@ -32,7 +33,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	// return message
-    fmt.Fprintf(w, "/ - Greetings from GoLand!")
+    fmt.Fprintf(w, "/ - Greetings from Golang!")
 }
 
 // Jump Function
@@ -46,7 +47,8 @@ func jump(w http.ResponseWriter, r *http.Request) {
 
 	// GET Method return a direct Response
 	if r.Method == "GET" {
-		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from GoLand!"}
+		log.Println("Received GET /jump")
+		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from Golang!"}
 		getData, err := json.Marshal(getResponse) 
 		if err != nil { 
 		  panic("Error in Marshal") 
@@ -80,6 +82,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, r, http.StatusBadRequest)
 		return
 	}
+	jmarshal, _ := json.Marshal(j)
 
 	// Define response variables
 	var mes string
@@ -98,6 +101,8 @@ func jump(w http.ResponseWriter, r *http.Request) {
 
 	// When there is 1 jump 
 	if len(i) == 1 { 
+		// Log
+		log.Println("Received POST /jump with 1 JUMP.jumps", string(jmarshal))
 
 		// Define Last URL
 		var url = i[0] + j.Last_path
@@ -106,7 +111,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		log.Println("GET Calling", url)
 		req, err := http.Get(url)
 		if err != nil {
-			mes = "/jump - Farewell from GoLand! Error jumping " + url
+			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
 			respdec := json.NewDecoder(req.Body)
@@ -128,6 +133,8 @@ func jump(w http.ResponseWriter, r *http.Request) {
 
 	// When there are more than 1 jumps
 	if len(i) > 1 { 
+		// Log
+		log.Println("Received POST /jump with multi JUMP.jumps", string(jmarshal))
 
 		// Define URL and Body
 		var url = i[0] + j.Jump_path
@@ -139,7 +146,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		requestBody, err := json.Marshal(body)
 		req, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
 		if err != nil {
-			mes = "/jump - Farewell from GoLand! Error jumping " + url
+			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
 			respdec := json.NewDecoder(req.Body)

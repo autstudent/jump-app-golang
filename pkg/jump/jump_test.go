@@ -29,7 +29,7 @@ func Test_home(t *testing.T) {
 		t.Fatalf("could not read response: %v", err)
   }
   bodyString := string(b)
-  expectString := "/ - Greetings from GoLand!"
+  expectString := "/ - Greetings from Golang!"
   if bodyString != expectString {
     t.Errorf("Expected %s received %s", bodyString, expectString)
   }
@@ -60,7 +60,7 @@ func Test_jump_get(t *testing.T) {
 		t.Fatalf("could not unmarshall response %v", err)
 	}
   var expectJson AppResponse
-  expectJson = AppResponse{Code: 200, Message: "/jump - Greetings from GoLand!"}
+  expectJson = AppResponse{Code: 200, Message: "/jump - Greetings from Golang!"}
   log.Println(bodyJson)
   log.Println(expectJson)
   if bodyJson != expectJson {
@@ -95,7 +95,7 @@ func Test_jump_post(t *testing.T) {
 		t.Fatalf("could not unmarshall response %v", err)
 	}
   var expectJson AppResponse
-  expectJson = AppResponse{Code: 200, Message: "/last - Greetings from GoLand!"}
+  expectJson = AppResponse{Code: 200, Message: "/last - Greetings from Golang!"}
   if bodyJson != expectJson {
     t.Errorf("Expected %v received %v", bodyJson, expectJson)
   }
@@ -113,7 +113,7 @@ func serverMock() *httptest.Server {
  
 func jumpMock(w http.ResponseWriter, r *http.Request) {
   var res AppResponse
-  res = AppResponse{Code: 200, Message: "/last - Greetings from GoLand!"}
+  res = AppResponse{Code: 200, Message: "/last - Greetings from Golang!"}
   data, err := json.Marshal(res) 
 	if err != nil { 
 	  panic("Error in Marshal") 
