@@ -74,7 +74,7 @@ $ curl -XPOST -H "Content-type: application/json" -d '{
 {"code":200,"message":"/jump - Greetings from Golang!"}
 ```
 
-- POST to index page
+- POST to users page
 
 ```$bash
 $ curl -XPOST -H "Content-type: application/json" -d '{
