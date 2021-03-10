@@ -42,8 +42,9 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	// Define custom header to avoid CORS
 	w.Header().Add("Content-Type", "application/json")
 	w.Header().Add("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Go-Lang-modifier", "true")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-modifier")
+	w.Header().Add("Golang-modifier", "true")
+	w.Header().Add("React-Modifier", r.Header.Get("React-Modifier"))
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-Modifier")
 
 	// GET Method return a direct Response
 	if r.Method == "GET" {
@@ -109,12 +110,19 @@ func jump(w http.ResponseWriter, r *http.Request) {
 
 		// Sent GET request to the last jump
 		log.Println("GET Calling", url)
-		req, err := http.Get(url)
+
+		client := &http.Client{}
+		req, err := http.NewRequest("GET", url, nil)
+		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
+		resp, err := client.Do(req)
+
+		log.Println("Headers ->", resp.Header)
+
 		if err != nil {
 			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
-			respdec := json.NewDecoder(req.Body)
+			respdec := json.NewDecoder(resp.Body)
 			respdec.DisallowUnknownFields()
 			var res AppResponse
 			errdec := respdec.Decode(&res)
@@ -144,12 +152,20 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		// Sent POST request to the last jump
 		log.Println("POST Calling", url, "-> Body: ", body)
 		requestBody, err := json.Marshal(body)
-		req, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+
+		clientPost := &http.Client{}
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
+		req.Header.Add("Content-Type", "application/json")
+		resp, err := clientPost.Do(req)
+
+		log.Println("Headers ->", resp.Header)
+
 		if err != nil {
 			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
-			respdec := json.NewDecoder(req.Body)
+			respdec := json.NewDecoder(resp.Body)
 			respdec.DisallowUnknownFields()
 			var res AppResponse
 			errdec := respdec.Decode(&res)
