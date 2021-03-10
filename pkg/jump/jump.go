@@ -44,8 +44,8 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Header().Add("Golang-modifier", "true")
 	w.Header().Add("React-Modifier", r.Header.Get("React-Modifier"))
-	w.Header().Add("x-trace-id", r.Header.Get("x-trace-id"))
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-Modifier, x-trace-id")
+	w.Header().Add("x-request-id", r.Header.Get("x-request-id"))
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-Modifier, x-request-id")
 
 	// GET Method return a direct Response
 	if r.Method == "GET" {
@@ -115,7 +115,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		client := &http.Client{}
 		req, err := http.NewRequest("GET", url, nil)
 		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
-		req.Header.Add("x-trace-id", r.Header.Get("x-trace-id"))
+		req.Header.Add("x-request-id", r.Header.Get("x-request-id"))
 		resp, err := client.Do(req)
 
 		log.Println("Headers ->", resp.Header)
@@ -159,7 +159,7 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
 		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
 		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("x-trace-id", r.Header.Get("x-trace-id"))
+		req.Header.Add("x-request-id", r.Header.Get("x-request-id"))
 		resp, err := clientPost.Do(req)
 
 		log.Println("Headers ->", resp.Header)
