@@ -45,7 +45,13 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Golang-modifier", "true")
 	w.Header().Add("React-Modifier", r.Header.Get("React-Modifier"))
 	w.Header().Add("x-request-id", r.Header.Get("x-request-id"))
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-Modifier, x-request-id")
+	w.Header().Add("x-b3-traceid", r.Header.Get("x-b3-traceid"))
+	w.Header().Add("x-b3-spanid", r.Header.Get("x-b3-spanid"))
+	w.Header().Add("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid"))
+	w.Header().Add("x-b3-sampled", r.Header.Get("x-b3-sampled"))
+	w.Header().Add("x-b3-flags", r.Header.Get("x-b3-flags"))
+	w.Header().Add("x-ot-span-context", r.Header.Get("x-ot-span-context"))
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-With,React-Modifier,x-request-id,x-b3-traceid,x-b3-spanid,x-b3-parentspanid,x-b3-sampled,x-b3-flags,x-ot-span-context")
 
 	// GET Method return a direct Response
 	if r.Method == "GET" {
@@ -116,6 +122,13 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		req, err := http.NewRequest("GET", url, nil)
 		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
 		req.Header.Add("x-request-id", r.Header.Get("x-request-id"))
+		req.Header.Add("x-b3-traceid", r.Header.Get("x-b3-traceid"))
+		req.Header.Add("x-b3-spanid", r.Header.Get("x-b3-spanid"))
+		req.Header.Add("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid"))
+		req.Header.Add("x-b3-sampled", r.Header.Get("x-b3-sampled"))
+		req.Header.Add("x-b3-flags", r.Header.Get("x-b3-flags"))
+		req.Header.Add("x-ot-span-context", r.Header.Get("x-ot-span-context"))
+
 		resp, err := client.Do(req)
 
 		log.Println("Headers ->", resp.Header)
@@ -160,6 +173,12 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Add("x-request-id", r.Header.Get("x-request-id"))
+		req.Header.Add("x-b3-traceid", r.Header.Get("x-b3-traceid"))
+		req.Header.Add("x-b3-spanid", r.Header.Get("x-b3-spanid"))
+		req.Header.Add("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid"))
+		req.Header.Add("x-b3-sampled", r.Header.Get("x-b3-sampled"))
+		req.Header.Add("x-b3-flags", r.Header.Get("x-b3-flags"))
+		req.Header.Add("x-ot-span-context", r.Header.Get("x-ot-span-context"))
 		resp, err := clientPost.Do(req)
 
 		log.Println("Headers ->", resp.Header)
