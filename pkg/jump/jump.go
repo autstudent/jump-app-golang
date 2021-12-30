@@ -42,12 +42,21 @@ func jump(w http.ResponseWriter, r *http.Request) {
 	// Define custom header to avoid CORS
 	w.Header().Add("Content-Type", "application/json")
 	w.Header().Add("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Go-Lang-modifier", "true")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, React-modifier")
+	w.Header().Add("Golang-modifier", "true")
+	w.Header().Add("React-Modifier", r.Header.Get("React-Modifier"))
+	w.Header().Add("X-request-id", r.Header.Get("X-request-id"))
+	w.Header().Add("X-B3-Traceid", r.Header.Get("X-B3-Traceid"))
+	w.Header().Add("X-B3-Spanid", r.Header.Get("X-B3-Spanid"))
+	w.Header().Add("X-B3-Parentspanid", r.Header.Get("X-B3-Parentspanid"))
+	w.Header().Add("X-B3-Sampled", r.Header.Get("X-B3-Sampled"))
+	w.Header().Add("X-B3-Flags", r.Header.Get("X-B3-Flags"))
+	w.Header().Add("X-Ot-Span-Context", r.Header.Get("X-Ot-Span-Context"))
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-With,React-Modifier,X-request-id,X-B3-Traceid,X-B3-Spanid,X-B3-Parentspanid,X-B3-Sampled,X-B3-Flags,X-Ot-Span-Context")
 
 	// GET Method return a direct Response
 	if r.Method == "GET" {
 		log.Println("Received GET /jump")
+		log.Println("Headers ->", r.Header)
 		getResponse := AppResponse{Code: http.StatusOK, Message: "/jump - Greetings from Golang!"}
 		getData, err := json.Marshal(getResponse) 
 		if err != nil { 
@@ -109,12 +118,27 @@ func jump(w http.ResponseWriter, r *http.Request) {
 
 		// Sent GET request to the last jump
 		log.Println("GET Calling", url)
-		req, err := http.Get(url)
+
+		client := &http.Client{}
+		req, err := http.NewRequest("GET", url, nil)
+		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
+		req.Header.Add("X-request-id", r.Header.Get("X-request-id"))
+		req.Header.Add("X-B3-Traceid", r.Header.Get("X-B3-Traceid"))
+		req.Header.Add("X-B3-Spanid", r.Header.Get("X-B3-Spanid"))
+		req.Header.Add("X-B3-Parentspanid", r.Header.Get("X-B3-Parentspanid"))
+		req.Header.Add("X-B3-Sampled", r.Header.Get("X-B3-Sampled"))
+		req.Header.Add("X-B3-Flags", r.Header.Get("X-B3-Flags"))
+		req.Header.Add("X-Ot-Span-Context", r.Header.Get("X-Ot-Span-Context"))
+
+		resp, err := client.Do(req)
+
+		log.Println("Headers ->", resp.Header)
+
 		if err != nil {
 			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
-			respdec := json.NewDecoder(req.Body)
+			respdec := json.NewDecoder(resp.Body)
 			respdec.DisallowUnknownFields()
 			var res AppResponse
 			errdec := respdec.Decode(&res)
@@ -144,12 +168,27 @@ func jump(w http.ResponseWriter, r *http.Request) {
 		// Sent POST request to the last jump
 		log.Println("POST Calling", url, "-> Body: ", body)
 		requestBody, err := json.Marshal(body)
-		req, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+
+		clientPost := &http.Client{}
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+		req.Header.Add("React-Modifier", r.Header.Get("React-Modifier"))
+		req.Header.Add("Content-Type", "application/json")
+		req.Header.Add("X-request-id", r.Header.Get("X-request-id"))
+		req.Header.Add("X-B3-Traceid", r.Header.Get("X-B3-Traceid"))
+		req.Header.Add("X-B3-Spanid", r.Header.Get("X-B3-Spanid"))
+		req.Header.Add("X-B3-Parentspanid", r.Header.Get("X-B3-Parentspanid"))
+		req.Header.Add("X-B3-Sampled", r.Header.Get("X-B3-Sampled"))
+		req.Header.Add("X-B3-Flags", r.Header.Get("X-B3-Flags"))
+		req.Header.Add("X-Ot-Span-Context", r.Header.Get("X-Ot-Span-Context"))
+		resp, err := clientPost.Do(req)
+
+		log.Println("Headers ->", resp.Header)
+
 		if err != nil {
 			mes = "/jump - Farewell from Golang! Error jumping " + url
 			cod = http.StatusBadGateway
 		} else {
-			respdec := json.NewDecoder(req.Body)
+			respdec := json.NewDecoder(resp.Body)
 			respdec.DisallowUnknownFields()
 			var res AppResponse
 			errdec := respdec.Decode(&res)
